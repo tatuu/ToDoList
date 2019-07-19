@@ -25,17 +25,8 @@ def index(request):
     }
     return render(request, 'todo/index.html', params)
 
-def list_new(request):
+def list_menu(request):
     form = ListForm(request.POST or None)
-    if request.method == 'POST':
-        list = List()
-        list.title = form.cleaned_data['title']
-
-        List.objects.create(
-            title = list.title,
-            create_date = models.DateTimeField(default=timezone.now)
-        )
-    return render(request, 'todo/index.html', {'form': form})
 
 
 

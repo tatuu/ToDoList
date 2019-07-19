@@ -1,0 +1,35 @@
+{% extends "todo/base.html" %}
+
+{% block title %}リスト{% endblock title %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <p>新しいToDoを作成する</p>
+
+    <form method = "post">
+    {% csrf_token %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">新しいToDoを作成する</h5>
+                    <div class = "row">
+                        <div class = "col-10">
+                            <div class = "row">
+                                <p>ToDo名</p>
+                            </div>
+                            <div class = "row">
+                                <p>期限</p>
+                            </div>
+                        </div>
+                        <div class = "col-2">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">ToDoの追加</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </form>
+    
+
+</div>
+
+{% endblock %}
