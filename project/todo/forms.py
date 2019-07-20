@@ -6,4 +6,5 @@ class ListForm(forms.Form):
 
 class TaskForm(forms.Form):
     title = forms.CharField(max_length=30)
-    deadline_date = forms.SelectDateWidget
+    deadline_date = forms.DateField(widget=forms.SelectDateWidget)
+    text = forms.CharField(max_length=1000)

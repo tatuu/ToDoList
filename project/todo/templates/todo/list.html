@@ -16,9 +16,15 @@
                         <div class = "col-10">
                             <div class = "row">
                                 <p>ToDo名</p>
+                                {{form.title}}
                             </div>
                             <div class = "row">
                                 <p>期限</p>
+                                {{form.deadline_date}}
+                            </div>
+                            <div class = "row">
+                                <p>メモ</p>
+                                {{form.text}}
                             </div>
                         </div>
                         <div class = "col-2">
@@ -28,7 +34,17 @@
             </div>
         </div>
     </form>
-    
+
+    {% for i in taskdata %}
+        <div class="card">
+            <h5 class="card-header">{{i.title}}</h5>
+            <div class="card-body">
+                <p class="card-text">期限:{{i.deadline_date}}</p>
+                <p class="card-text">作成日:{{i.create_date}}</p>
+                <p class="card-text">{{i.text}}</p>
+            </div>
+        </div>
+    {% endfor %}
 
 </div>
 
