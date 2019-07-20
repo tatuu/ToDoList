@@ -35,7 +35,10 @@
         </div>
     </form>
 
-    {% for i in taskdata %}
+    {% if not taskdata %}
+        <p>登録されたToDoはございません</p>
+    {% else %}
+        {% for i in taskdata %}
         <div class="card">
             <h5 class="card-header">{{i.title}}</h5>
             <div class="card-body">
@@ -44,7 +47,10 @@
                 <p class="card-text">{{i.text}}</p>
             </div>
         </div>
-    {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+
 
 </div>
 
