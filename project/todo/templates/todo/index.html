@@ -26,7 +26,7 @@
     
     {% for i in lists %}
         <div class="card">
-            <h5 class="card-header">{{i.title}}</h5>
+            <h5 class="card-header"><a href="{% url 'todo:list' i.id%}">{{i.title}}</a></h5>
             <div class="card-body">
                 <p class="card-text">ここに説明</p>
             </div>

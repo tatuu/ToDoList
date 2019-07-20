@@ -25,8 +25,13 @@ def index(request):
     }
     return render(request, 'todo/index.html', params)
 
-def list_menu(request):
-    form = ListForm(request.POST or None)
+def list(request, list_id):
+    listdata = List.objects.get(id=list_id)
+    params = {
+        'id': list_id,
+        'listdata': listdata,
+    }
+    return render(request, 'todo/list.html', params)
 
 
 

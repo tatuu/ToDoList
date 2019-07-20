@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="jumbotron">
-    <p>新しいToDoを作成する</p>
+    <p>{{listdata.title}}</p>
 
     <form method = "post">
     {% csrf_token %}
