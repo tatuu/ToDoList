@@ -43,6 +43,14 @@ def list(request, list_id):
             text = task.text,
         )
 
+    for t in taskdata:
+        if str(t.id) in request.POST:
+            if t.completed:
+                t.completed = False
+            elif not t.completed:
+                t.completed = True
+            t.save()
+
 
     params = {
         'id': list_id,
