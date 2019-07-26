@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.db import models
 from django.utils import timezone
+from django.http import HttpResponse, JsonResponse
 from .models import List, Task
 from .forms import ListForm, TaskForm
 
@@ -60,5 +61,15 @@ def list(request, list_id):
     }
     return render(request, 'todo/list.html', params)
 
+def search(request):
+    return render(request, 'todo/search.html')
 
+def search_result(request):    
+    input_text = request.GET.get("name_input_text")
+    list_title = [list.title for list in List.objects.filter(title__icontains=input_text)]
 
+    params = {
+        'list_title': list_title,
+    }
+
+    return JsonResponse(params)

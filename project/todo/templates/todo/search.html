@@ -1,0 +1,61 @@
+{% extends "todo/base.html" %}
+
+{% block title %}リスト{% endblock title %}
+
+{% block content %}
+
+<div class="jumbotron">
+<form action="{% url 'todo:search_result'%}" method = "GET" id="ajax-search-post">
+    <div class="card">
+        <div class="card-body">
+            <div class = "row">
+                <div class = "col-10">
+                    <input id="id_search_word" name="name_input_text"  type="text" class="form-control mr-sm-2" placeholder="Search" aria-label="Search">
+                </div>
+                <div class = "col-2">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id = "search_button">検索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id = "result">
+{% for i in listdata %}
+    <div class="card">
+        <h5 class="card-header"><a href="{% url 'todo:list' i.id%}">{{i.title}}</a></h5>
+        <div class="card-body">
+            <p class="card-text">ここに説明</p>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+</div>
+
+{% block extrajs %}
+
+{% endblock %}
+<script>
+
+$('#ajax-search-post').on('submit', event => {
+    //event.preventDefault();
+    $.ajax({
+        'url': {% url 'todo:search_result'%},
+        'type': 'GET',
+        'data': {
+            'title': "$('#id_search_word').val()",
+        },
+        'dataType': 'json',
+    }).done( response => {
+        $('#result').empty();
+        //alert("success");
+    }). fail( response => {
+        //alert("fail");
+    });
+
+
+});
+</script>
+
+{% endblock %}
