@@ -20,8 +20,10 @@ def index(request):
 
 
     listdata = List.objects.all()
+    taskdata = Task.objects.all()
     params = {
         'lists': listdata,
+        'tasks': taskdata,
         'form': form,
         'status': status,
     }
@@ -70,17 +72,17 @@ def search_result(request):
 
     ls = cl.OrderedDict()
     ts = cl.OrderedDict()
-    
+
 
     if input_text:
         count = 0
         for l in List.objects.filter(title__icontains=input_text):
-            ls[count] = cl.OrderedDict({"id":l.id, "title": l.title, "create_date": l.create_date})
+            ls[count] = cl.OrderedDict({"id":l.id, "title": l.title, "create_date": "{0:%Y年%m月%d日}".format(l.create_date)})
             count += 1
 
         count = 0
         for t in Task.objects.filter(title__icontains=input_text):
-            ts[count] = cl.OrderedDict({"list_id":t.list.id, "list_title":t.list.title, "title":t.title, "create_date":t.create_date, "deadline_date":t.deadline_date})
+            ts[count] = cl.OrderedDict({"list_id":t.list.id, "list_title":t.list.title, "title":t.title, "create_date":"{0:%Y年%m月%d日}".format(t.create_date), "deadline_date":"{0:%Y年%m月%d日}".format(t.deadline_date)})
             count += 1
 
     params = {
