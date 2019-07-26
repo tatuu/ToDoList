@@ -68,17 +68,20 @@ def search(request):
 def search_result(request):    
     input_text = request.GET.get("title")
 
-    count = 0
     ls = cl.OrderedDict()
-    for l in List.objects.filter(title__icontains=input_text):
-        ls[count] = cl.OrderedDict({"id":l.id, "title": l.title, "create_date": l.create_date})
-        count += 1
-
-    count = 0
     ts = cl.OrderedDict()
-    for t in Task.objects.filter(title__icontains=input_text):
-        ts[count] = cl.OrderedDict({"list_id":t.list.id, "list_title":t.list.title, "title":t.title, "create_date":t.create_date, "deadline_date":t.deadline_date})
-        count += 1
+    
+
+    if input_text:
+        count = 0
+        for l in List.objects.filter(title__icontains=input_text):
+            ls[count] = cl.OrderedDict({"id":l.id, "title": l.title, "create_date": l.create_date})
+            count += 1
+
+        count = 0
+        for t in Task.objects.filter(title__icontains=input_text):
+            ts[count] = cl.OrderedDict({"list_id":t.list.id, "list_title":t.list.title, "title":t.title, "create_date":t.create_date, "deadline_date":t.deadline_date})
+            count += 1
 
     params = {
         'list': ls,

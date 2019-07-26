@@ -43,8 +43,28 @@ $('#ajax-search-post').on('submit', event => {
         'dataType': 'json',
     }).done( response => {
         $('#result').empty();
-
         
+
+        if($.isEmptyObject(response.task)){
+            $('#result').append("<p>対象のToDoが見つかりません</p>");
+        }else{
+            $('#result').append("<p>ToDoが" + Object.keys(response.task).length + "件見つかりました</p>");
+            
+            
+            for (var l in response.task) {
+                $('#result').append(
+                    "<h5 class=\"card-header\"><a href=\" /list/" +
+                    response.task[l].list_id +
+                    "\">" +
+                    response.task[l].title +
+                    "</a></h5>"
+                );
+                $('#result').append("<p>リスト:" + response.task[l].list_title + "</p>");
+                $('#result').append("<p>期限:　" + response.task[l].deadline_date + "</p>");
+                $('#result').append("<p>作成日:" + response.task[l].create_date + "</p>");
+            }
+        }
+
         if($.isEmptyObject(response.list)){
             $('#result').append("<p>対象のToDoリストが見つかりません</p>");
         }else{
@@ -62,6 +82,7 @@ $('#ajax-search-post').on('submit', event => {
                 $('#result').append("<p>作成日:" + response.list[l].create_date + "</p>");
             }
         }
+
     }). fail( response => {
         
     });
