@@ -8,8 +8,8 @@ import collections as cl
 
 def index(request):
     form = ListForm(request.POST or None)
-    status = False
-    if form.is_valid():
+    status = False  #Trueならば「新しいToDoリストが作成されました」の表示
+    if form.is_valid(): #リストの作成
         list = List()
         list.title = form.cleaned_data['title']
 
@@ -21,11 +21,38 @@ def index(request):
 
     listdata = List.objects.all()
     taskdata = Task.objects.all()
+
+    dict_num = {}
+    dict_checked_num = {}
+    dict_deadline = {}
+    for l in listdata:
+        task_num = 0
+        checked_task_num = 0
+        closest_deadline = None
+        for t in taskdata:
+            if l == t.list:
+                task_num += 1   #タスク数の加算
+                if t.completed:
+                    checked_task_num += 1   #チェック済みタスク数の加算
+                else:
+                    if closest_deadline is None or closest_deadline >= t.deadline_date:
+                        closest_deadline = t.deadline_date  #もっとも近い締切がNoneまたは比較対象のほうが近い締切ならば代入
+
+        if closest_deadline is not None:
+            closest_deadline = "{0:%Y年%m月%d日}".format(closest_deadline)
+        
+        dict_num[l.id] = task_num
+        dict_checked_num[l.id] = checked_task_num
+        dict_deadline[l.id] = closest_deadline
+
     params = {
         'lists': listdata,
         'tasks': taskdata,
         'form': form,
         'status': status,
+        'dict_num': dict_num,
+        'dict_checked_num': dict_checked_num,
+        'dict_deadline': dict_deadline,
     }
     return render(request, 'todo/index.html', params)
 

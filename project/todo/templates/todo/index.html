@@ -1,6 +1,8 @@
 
 {% extends "todo/base.html" %}
 
+{% load dictid %}
+
 {% block title %}ToDoリスト{% endblock title %}
 
 {% block content %}
@@ -29,7 +31,14 @@
             <h5 class="card-header"><a href="{% url 'todo:list' i.id%}">{{i.title}}</a></h5>
             <div class="card-body">
                 <p class="card-text">
-
+                    {% with i.id as id %}
+                        {% ifequal dict_num|dictid:id 0 %}
+                            <p>ToDoがありません</p>
+                        {% else %}
+                            <p>{{ dict_num|dictid:id }}個中{{ dict_checked_num|dictid:id }}個がチェック済み</p>
+                            <p>~{{ dict_deadline|dictid:id }}</p>
+                        {% endifequal %}
+                    {% endwith %}
                 </p>
             </div>
         </div>
