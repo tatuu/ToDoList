@@ -14,4 +14,5 @@ class Task(models.Model):
     completed = models.BooleanField(default=False)
     list = models.ForeignKey(List, on_delete=models.CASCADE)
 
+
 # Create your models here.

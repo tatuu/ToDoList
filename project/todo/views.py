@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.db import models
 from django.utils import timezone
 from django.http import HttpResponse, JsonResponse
+from django.contrib import messages
 from .models import List, Task
 from .forms import ListForm, TaskForm
 import collections as cl
@@ -62,17 +63,30 @@ def list(request, list_id):
 
     form = TaskForm(request.POST or None)
     if form.is_valid():
+        create_task = True
         task = Task()
         task.title = form.cleaned_data['title']
         task.deadline_date = form.cleaned_data['deadline_date']
         task.text = form.cleaned_data['text']
 
-        Task.objects.create(
-            title = task.title,
-            deadline_date = task.deadline_date,
-            list = listdata,
-            text = task.text,
-        )
+        if len(task.title) >= 30:
+            form.add_error(None, 'ToDo名が31文字以上入力されています．')
+            create_task = False
+
+        for t in taskdata:
+            if t.title == task.title:
+                form.add_error(None, '同じToDo名のタスクが既に存在します．')
+                create_task = False
+                break
+
+        if create_task:
+            Task.objects.create(
+                title = task.title,
+                deadline_date = task.deadline_date,
+                list = listdata,
+                text = task.text,
+            )
+            taskdata = Task.objects.filter(list=listdata) #追加したタスクの反映の為にもう一度代入
 
     for t in taskdata:
         if str(t.id) in request.POST:

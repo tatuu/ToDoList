@@ -5,6 +5,9 @@
 {% block content %}
 
 <div class="jumbotron">
+    {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+    {% endfor %}
     <p>{{listdata.title}}</p>
 
     <form method = "post">
