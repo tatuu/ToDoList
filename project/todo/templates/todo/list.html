@@ -5,70 +5,74 @@
 {% block content %}
 
 <div class="jumbotron">
-    {% for error in form.non_field_errors %}
-        <p>{{ error }}</p>
-    {% endfor %}
-    <p>{{listdata.title}}</p>
+    <div class="container">
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endfor %}
+        <p class="display-4">{{listdata.title}}</p>
 
-    <form method = "post">
-    {% csrf_token %}
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">新しいToDoを作成する</h5>
-                    <div class = "row">
-                        <div class = "col-10">
-                            <div class = "row">
-                                <p>ToDo名</p>
+        <form method = "post">
+        {% csrf_token %}
+            <div class="card mb-4">
+                <h5 class="card-header">新しいToDoを作成する</h5>
+                <div class="card-body">
+                        <div class = "form-group">
+                            <div class = "mb-3">
                                 {{form.title}}
                             </div>
-                            <div class = "row">
-                                <p>期限</p>
+                            <div class = "mb-3">
                                 {{form.deadline_date}}
                             </div>
-                            <div class = "row">
-                                <p>メモ</p>
+                            <div class = "mb-3">
                                 {{form.text}}
                             </div>
-                        </div>
-                        <div class = "col-2">
                             <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="submit">ToDoの追加</button>
                         </div>
-                    </div>
-            </div>
-        </div>
-    </form>
-
-    {% if not taskdata %}
-        <p>登録されたToDoはございません</p>
-    {% else %}
-        {% for i in taskdata %}
-        <div class="card">
-            <h5 class="card-header">{{i.title}}</h5>
-            <div class="card-body">
-                <div class = "row">
-                    <div class = "col-10">
-                        <p class="card-text">期限:{{i.deadline_date}}</p>
-                        <p class="card-text">作成日:{{i.create_date}}</p>
-                        <p class="card-text">{{i.text}}</p>
-                    </div>
-                    <div class = "col-2">
-                        <form method = "post">
-                        {% csrf_token %}
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name={{i.id}}>
-                                {% if i.completed %}
-                                    完了
-                                {% else %}
-                                    未完了
-                                {% endif %}
-                            </button>
-                        </form>
-                    </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
-    {% endif %}
+        </form>
 
+        {% if not taskdata %}
+            <div class="alert alert-danger" role="alert">登録されたToDoはございません</div>
+        {% else %}
+            {% for i in taskdata %}
+            <div class="card mb-2">
+                <h5 class="card-header">{{i.title}}</h5>
+                <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>期限</th>
+                            <th>作成日</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{i.deadline_date}}</td>
+                            <td>{{i.create_date}}</td>
+                        </tr>
+                    <tbody>
+                </table>
+                <p class="card-text">{{i.text}}</p>
+            
+                </div>
+
+                <div class="card-footer">
+                <form method = "post">
+                {% csrf_token %}
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name={{i.id}}>
+                        {% if i.completed %}
+                            完了
+                        {% else %}
+                            未完了
+                        {% endif %}
+                    </button>
+                </form>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
 
 
 </div>

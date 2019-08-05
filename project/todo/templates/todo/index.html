@@ -8,41 +8,48 @@
 {% block content %}
 
 <div class="jumbotron">
-    <p class="display-4">新しいToDoを作成する</p>
+    <div class="container">
+
+    {% if status %}
+        <div class="alert alert-success" role="alert">新しいToDoリストが作成されました</div>
+    {% endif %}
 
     <form method="post">
     {% csrf_token %}
-    <div class = "row">
-        <div class = "col-10">
-            {{form.title}}
+    <div class="card mb-4">
+        <div class="card-header">
+            新しいToDoを作成する
         </div>
-        <div class = "col-2">
+        <div class="card-body">
+            <div class="form-group">
+                {{form}}
+            </div>
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">リストの作成</button>
         </div>
     </div>
     </form>
     
-    {% if status %}
-        <div class="alert alert-success" role="alert">新しいToDoリストが作成されました</div>
-    {% endif %}
+
     
     {% for i in lists %}
-        <div class="card">
+        <div class="card mb-2">
             <h5 class="card-header"><a href="{% url 'todo:list' i.id%}">{{i.title}}</a></h5>
-            <div class="card-body">
-                <p class="card-text">
+                <ul class="list-group list-group-flush">
                     {% with i.id as id %}
                         {% ifequal dict_num|dictid:id 0 %}
-                            <p>ToDoがありません</p>
+                            <li class="list-group-item">ToDoがありません</li>
                         {% else %}
-                            <p>{{ dict_num|dictid:id }}個中{{ dict_checked_num|dictid:id }}個がチェック済み</p>
-                            <p>~{{ dict_deadline|dictid:id }}</p>
+                            <li class="list-group-item">{{ dict_num|dictid:id }}個中{{ dict_checked_num|dictid:id }}個がチェック済み</li>
+                            <li class="list-group-item">~{{ dict_deadline|dictid:id }}</li>
                         {% endifequal %}
                     {% endwith %}
-                </p>
-            </div>
+                </ul>
         </div>
     {% endfor %}
+    </div>
+
+
+
 </div>
 
 {% endblock %}

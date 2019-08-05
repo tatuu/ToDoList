@@ -5,25 +5,31 @@
 {% block content %}
 
 <div class="jumbotron">
-<form id="ajax-search-post" action="{% url 'todo:search_result'%}" method = "GET" >
-    <div class="card">
-        <div class="card-body">
-            <div class = "row">
-                <div class = "col-10">
-                    <input id="id_search_word" name="name_input_text"  type="text" class="form-control mr-sm-2" placeholder="Search" aria-label="Search">
+    <div class="container">
+    <form id="ajax-search-post" action="{% url 'todo:search_result'%}" method = "GET" >
+        <div class="card mb-4">
+            <div class="card-header">
+                ToDoを見つける
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                <input id="id_search_word" name="name_input_text"  type="text" class="form-control mr-sm-2" placeholder="検索する文字を入力してください" aria-label="Search">
                 </div>
-                <div class = "col-2">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id = "search_button">検索</button>
-                </div>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id = "search_button">検索</button>
             </div>
         </div>
+    </form>
+
+        <div id ="alert_todo"></div>
+        <div id = "result_todo" class = "mb-4">
+            <!-- ここに検索結果が反映される -->
+        </div>
+
+        <div id ="alert_list"></div>
+        <div id = "result_list">
+            <!-- ここに検索結果が反映される -->
+        </div>
     </div>
-</form>
-
-<div id = "result" class = "card">
-
-</div>
-
 </div>
 
 {% block extrajs %}
@@ -42,44 +48,50 @@ $('#ajax-search-post').on('submit', event => {
         },
         'dataType': 'json',
     }).done( response => {
-        $('#result').empty();
+        $('#alert_todo').empty();
+        $('#result_todo').empty();
+        $('#alert_list').empty();
+        $('#result_list').empty();
         
 
         if($.isEmptyObject(response.task)){
-            $('#result').append("<p>対象のToDoが見つかりません</p>");
+            $('#alert_todo').append("<div class=\"alert alert-danger\" role=\"alert\">対象のToDoが見つかりません</div>");
         }else{
-            $('#result').append("<p>ToDoが" + Object.keys(response.task).length + "件見つかりました</p>");
+            $('#alert_todo').append("<div class=\"alert alert-success\" role=\"alert\">ToDoが" + Object.keys(response.task).length + "件見つかりました</div>");
             
             
             for (var l in response.task) {
-                $('#result').append(
-                    "<h5 class=\"card-header\"><a href=\" /list/" +
+                $('#result_todo').append(
+                    "<div class=\"card mb-2\"><h5 class=\"card-header\"><a href=\" /list/" +
                     response.task[l].list_id +
                     "\">" +
                     response.task[l].title +
-                    "</a></h5>"
-                );
-                $('#result').append("<p>リスト:" + response.task[l].list_title + "</p>");
-                $('#result').append("<p>期限:　" + response.task[l].deadline_date + "</p>");
-                $('#result').append("<p>作成日:" + response.task[l].create_date + "</p>");
+                    "</a></h5><div class=\"card-body\"><table class=\"table\"><thead><tr><th>リスト</th><th>期限</th><th>作成日</th></tr></thead><tbody><tr><td>" +
+                    response.task[l].list_title +
+                    "</td><td>" +
+                    response.task[l].deadline_date +
+                    "</td><td>" +
+                    response.task[l].create_date +
+                    "</td></tr></tbody></table></div></div>"
+                    );
             }
         }
 
         if($.isEmptyObject(response.list)){
-            $('#result').append("<p>対象のToDoリストが見つかりません</p>");
+            $('#alert_list').append("<div class=\"alert alert-danger\" role=\"alert\">対象のToDoリストが見つかりません</div>");
         }else{
-            $('#result').append("<p>ToDoリストが" + Object.keys(response.list).length + "件見つかりました</p>");
+            $('#alert_list').append("<div class=\"alert alert-success\" role=\"alert\">ToDoリストが" + Object.keys(response.list).length + "件見つかりました</div>");
             
             
             for (var l in response.list) {
-                $('#result').append(
-                    "<h5 class=\"card-header\"><a href=\" /list/" +
+                $('#result_list').append(
+                    "<div class=\"card mb-2\"><h5 class=\"card-header\"><a href=\" /list/" +
                     response.list[l].id +
                     "\">" +
                     response.list[l].title +
-                    "</a></h5>"
-                );
-                $('#result').append("<p>作成日:" + response.list[l].create_date + "</p>");
+                    "</a></h5><div class=\"card-body\"><table class=\"table\"><thead><tr><th>作成日</th></tr></thead><tbody><tr><td>" +
+                    response.list[l].create_date +
+                    "</td></tr></th></table></div></div>");
             }
         }
 

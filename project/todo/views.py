@@ -71,12 +71,12 @@ def list(request, list_id):
         task.text = form.cleaned_data['text']
 
         if len(task.title) >= 30:
-            form.add_error(None, 'ToDo名が31文字以上入力されています．')
+            form.add_error(None, 'ToDo名が31文字以上入力されています')
             create_task = False
 
         for t in taskdata:
             if t.title == task.title:
-                form.add_error(None, '同じToDo名のタスクが既に存在します．')
+                form.add_error(None, '同じToDo名のタスクが既に存在します')
                 create_task = False
                 break
 
