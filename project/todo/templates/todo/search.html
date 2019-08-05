@@ -37,6 +37,16 @@
 {% endblock %}
 <script>
 
+    function escapeHTML(str){
+        str = str.replace(/&/g, '&amp;');
+        str = str.replace(/>/g, '&gt;');
+        str = str.replace(/</g, '&lt;');
+        str = str.replace(/"/g, '&quot;');
+        str = str.replace(/'/g, '&#x27;');
+        str = str.replace(/`/g, '&#x60;');
+        return str;
+    }
+
 $('#ajax-search-post').on('submit', event => {
     event.preventDefault();
     
@@ -61,13 +71,15 @@ $('#ajax-search-post').on('submit', event => {
             
             
             for (var l in response.task) {
+                tt = escapeHTML(response.task[l].title);
+                tlt = escapeHTML(response.task[l].list_title);
                 $('#result_todo').append(
                     "<div class=\"card mb-2\"><h5 class=\"card-header\"><a href=\" /list/" +
                     response.task[l].list_id +
                     "\">" +
-                    response.task[l].title +
+                    tt +
                     "</a></h5><div class=\"card-body\"><table class=\"table\"><thead><tr><th>リスト</th><th>期限</th><th>作成日</th></tr></thead><tbody><tr><td>" +
-                    response.task[l].list_title +
+                    tlt +
                     "</td><td>" +
                     response.task[l].deadline_date +
                     "</td><td>" +
@@ -84,11 +96,12 @@ $('#ajax-search-post').on('submit', event => {
             
             
             for (var l in response.list) {
+                lt = escapeHTML(response.list[l].title);
                 $('#result_list').append(
                     "<div class=\"card mb-2\"><h5 class=\"card-header\"><a href=\" /list/" +
                     response.list[l].id +
                     "\">" +
-                    response.list[l].title +
+                    lt +
                     "</a></h5><div class=\"card-body\"><table class=\"table\"><thead><tr><th>作成日</th></tr></thead><tbody><tr><td>" +
                     response.list[l].create_date +
                     "</td></tr></th></table></div></div>");
