@@ -6,6 +6,7 @@ from django.contrib import messages
 from .models import List, Task
 from .forms import ListForm, TaskForm
 import collections as cl
+import html
 
 def index(request):
     form = ListForm(request.POST or None)
@@ -15,7 +16,7 @@ def index(request):
         list.title = form.cleaned_data['title']
 
         List.objects.create(
-            title = list.title,
+            title = html.escape(list.title),
         )
         status = True
 
@@ -81,10 +82,10 @@ def list(request, list_id):
 
         if create_task:
             Task.objects.create(
-                title = task.title,
+                title = html.escape(task.title),
                 deadline_date = task.deadline_date,
                 list = listdata,
-                text = task.text,
+                text = html.escape(task.text),
             )
             taskdata = Task.objects.filter(list=listdata) #追加したタスクの反映の為にもう一度代入
 

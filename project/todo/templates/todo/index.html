@@ -8,9 +8,9 @@
 {% block content %}
 
 <div class="jumbotron">
-    <p>新しいToDoを作成する</p>
+    <p class="display-4">新しいToDoを作成する</p>
 
-    <form method = "post">
+    <form method="post">
     {% csrf_token %}
     <div class = "row">
         <div class = "col-10">
@@ -23,7 +23,7 @@
     </form>
     
     {% if status %}
-        <p>新しいToDoリストが作成されました</p>
+        <div class="alert alert-success" role="alert">新しいToDoリストが作成されました</div>
     {% endif %}
     
     {% for i in lists %}
