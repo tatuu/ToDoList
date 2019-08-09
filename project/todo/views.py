@@ -62,6 +62,18 @@ def list(request, list_id):
     listdata = List.objects.get(id=list_id)
     taskdata = Task.objects.filter(list=listdata)
 
+    for t in taskdata:
+        if 'status_' + str(t.id) in request.POST:
+            if t.completed:
+                t.completed = False
+            elif not t.completed:
+                t.completed = True
+            t.save()
+            break
+        elif 'delete_' + str(t.id) in request.POST:
+            t.delete()
+            break
+
     form = TaskForm(request.POST or None)
     if form.is_valid():
         create_task = True
@@ -87,16 +99,10 @@ def list(request, list_id):
                 list = listdata,
                 text = html.escape(task.text),
             )
-            taskdata = Task.objects.filter(list=listdata) #追加したタスクの反映の為にもう一度代入
+            
+    taskdata = Task.objects.filter(list=listdata) #タスクの追加や削除、変更の反映の為にもう一度代入
 
-    for t in taskdata:
-        if str(t.id) in request.POST:
-            if t.completed:
-                t.completed = False
-            elif not t.completed:
-                t.completed = True
-            t.save()
-
+            
 
     params = {
         'id': list_id,
