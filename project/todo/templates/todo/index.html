@@ -9,11 +9,10 @@
 
 <div class="jumbotron">
     <div class="container">
-
     {% if status %}
         <div class="alert alert-success" role="alert">新しいToDoリストが作成されました</div>
     {% endif %}
-
+    
     <form method="post">
     {% csrf_token %}
     <div class="card mb-4">
@@ -24,7 +23,7 @@
             <div class="form-group">
                 {{form}}
             </div>
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">リストの作成</button>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="make_list">リストの作成</button>
         </div>
     </div>
     </form>
@@ -33,7 +32,10 @@
     
     {% for i in lists %}
         <div class="card mb-2">
-            <h5 class="card-header"><a href="{% url 'todo:list' i.id%}">{{i.title}}</a></h5>
+            <h5 class="card-header">
+                <a href="{% url 'todo:list' i.id%}">{{i.title}}</a>
+            </h5>
+            <div class="card-body">
                 <ul class="list-group list-group-flush">
                     {% with i.id as id %}
                         {% ifequal dict_num|dictid:id 0 %}
@@ -44,7 +46,37 @@
                         {% endifequal %}
                     {% endwith %}
                 </ul>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-outline-danger my-2 my-sm-0 " data-toggle="modal" data-target="#deleteModal_{{i.id}}">
+                    削除
+                </button>
+            </div>
         </div>
+
+        <!-- モーダルの設定 -->
+        <div class="modal fade" id="deleteModal_{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">警告</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>ToDoリスト「{{i.title}}」を削除しますか？<br>関連ToDoも全て削除されます。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">このウィンドウを閉じる</button>
+                <form method = "post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger" name="delete_{{i.id}}">ToDoリストを削除する</button>
+                </form>
+            </div><!-- /.modal-footer -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
     {% endfor %}
     </div>
 

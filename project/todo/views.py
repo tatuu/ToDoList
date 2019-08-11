@@ -9,16 +9,31 @@ import collections as cl
 import html
 
 def index(request):
+    listdata = List.objects.all()
+    making_list = True
+    for l in listdata:
+        if 'delete_' + str(l.id) in request.POST:
+            l.delete()
+            listdata = List.objects.all()
+            making_list = False
+            break
+
     form = ListForm(request.POST or None)
     status = False  #Trueならば「新しいToDoリストが作成されました」の表示
-    if form.is_valid(): #リストの作成
-        list = List()
-        list.title = form.cleaned_data['title']
+    if making_list:
+        if form.is_valid(): #リストの作成
+            list = List()
+            list.title = form.cleaned_data['title']
 
-        List.objects.create(
-            title = html.escape(list.title),
-        )
-        status = True
+            if len(list.title) >= 30:
+                form.add_error(None, 'ToDoリストの名称は30文字以内にしてください')
+            elif len(list.title) == 0:
+                form.add_error(None, 'ToDoリストの名称を入力してください')
+            else:
+                List.objects.create(
+                    title = html.escape(list.title),
+                )
+                status = True
 
 
     listdata = List.objects.all()
@@ -72,6 +87,7 @@ def list(request, list_id):
             break
         elif 'delete_' + str(t.id) in request.POST:
             t.delete()
+            taskdata = Task.objects.filter(list=listdata)
             break
 
     form = TaskForm(request.POST or None)
