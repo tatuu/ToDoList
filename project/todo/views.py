@@ -136,7 +136,7 @@ def search_result(request):
 
     ls = cl.OrderedDict()
     ts = cl.OrderedDict()
-
+    tx = cl.OrderedDict()
 
     if input_text:
         count = 0
@@ -149,9 +149,15 @@ def search_result(request):
             ts[count] = cl.OrderedDict({"list_id":t.list.id, "list_title":t.list.title, "title":t.title, "create_date":"{0:%Y年%m月%d日}".format(t.create_date), "deadline_date":"{0:%Y年%m月%d日}".format(t.deadline_date)})
             count += 1
 
+        count = 0
+        for t in Task.objects.filter(text__icontains=input_text):
+            tx[count] = cl.OrderedDict({"list_id":t.list.id, "list_title":t.list.title, "title":t.title, "text":t.text, "create_date":"{0:%Y年%m月%d日}".format(t.create_date), "deadline_date":"{0:%Y年%m月%d日}".format(t.deadline_date)})
+            count += 1
+
     params = {
         'list': ls,
         'task': ts,
+        'text': tx,
     }
 
     return JsonResponse(params)

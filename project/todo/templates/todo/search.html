@@ -29,6 +29,11 @@
         <div id = "result_list">
             <!-- ここに検索結果が反映される -->
         </div>
+
+        <div id ="alert_txt"></div>
+        <div id = "result_txt">
+            <!-- ここに検索結果が反映される -->
+        </div>
     </div>
 </div>
 
@@ -62,6 +67,8 @@ $('#ajax-search-post').on('submit', event => {
         $('#result_todo').empty();
         $('#alert_list').empty();
         $('#result_list').empty();
+        $('#alert_txt').empty();
+        $('#result_txt').empty();
         
 
         if($.isEmptyObject(response.task)){
@@ -105,6 +112,34 @@ $('#ajax-search-post').on('submit', event => {
                     "</a></h5><div class=\"card-body\"><table class=\"table\"><thead><tr><th>作成日</th></tr></thead><tbody><tr><td>" +
                     response.list[l].create_date +
                     "</td></tr></th></table></div></div>");
+            }
+        }
+
+        if($.isEmptyObject(response.text)){
+            $('#alert_txt').append("<div class=\"alert alert-danger\" role=\"alert\">対象のメモが見つかりません</div>");
+        }else{
+            $('#alert_txt').append("<div class=\"alert alert-success\" role=\"alert\">メモが" + Object.keys(response.text).length + "件見つかりました</div>");
+            
+            
+            for (var l in response.text) {
+                tt = escapeHTML(response.text[l].title);
+                tlt = escapeHTML(response.text[l].list_title);
+                txt = escapeHTML(response.text[l].text);
+                $('#result_txt').append(
+                    "<div class=\"card mb-2\"><h5 class=\"card-header\"><a href=\" /list/" +
+                    response.text[l].list_id +
+                    "\">" +
+                    tt +
+                    "</a></h5><div class=\"card-body\"><table class=\"table\"><thead><tr><th>リスト</th><th>期限</th><th>作成日</th></tr></thead><tbody><tr><td>" +
+                    tlt +
+                    "</td><td>" +
+                    response.text[l].deadline_date +
+                    "</td><td>" +
+                    response.text[l].create_date +
+                    "</td></tr></tbody></table><p class=\"card-text\">" +
+                    txt +
+                    "</p></div></div>"
+                    );
             }
         }
 
