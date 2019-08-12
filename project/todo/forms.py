@@ -7,6 +7,6 @@ class ListForm(forms.Form):
 
 class TaskForm(forms.Form):
     title = forms.CharField(max_length=100, label='', widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'ToDo名を入力してください'}))
-    deadline_date = forms.DateField(label='', widget=forms.DateInput(attrs={'class':'form-control', 'type':'date'}))
+    deadline_date = forms.DateField(label='', widget=forms.SelectDateWidget(attrs={'class':'form-control', 'type':'date'}))
     text = forms.CharField(max_length=1000, required=False, label='', widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'メモを入力できます'}))
         
