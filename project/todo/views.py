@@ -34,6 +34,7 @@ def index(request):
                     title = html.escape(list.title),
                 )
                 status = True
+                form = ListForm() #ページ遷移後のformの入力値(value)をクリア
 
 
     listdata = List.objects.all()
@@ -118,6 +119,7 @@ def list(request, list_id):
                 text = html.escape(task.text),
             )
             status = True
+            form = TaskForm() #ページ遷移後のformの入力値(value)をクリア
             
     taskdata = Task.objects.filter(list=listdata) #タスクの追加や削除、変更の反映の為にもう一度代入
 
