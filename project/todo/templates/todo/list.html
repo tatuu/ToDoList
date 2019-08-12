@@ -9,6 +9,11 @@
         {% for error in form.non_field_errors %}
             <div class="alert alert-danger" role="alert">{{ error }}</div>
         {% endfor %}
+
+        {% if status %}
+            <div class="alert alert-success" role="alert">新しいToDoが作成されました</div>
+        {% endif %}
+
         <p class="display-4">{{listdata.title}}</p>
 
         <form method = "post">

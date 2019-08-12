@@ -77,6 +77,8 @@ def list(request, list_id):
     listdata = List.objects.get(id=list_id)
     taskdata = Task.objects.filter(list=listdata)
 
+    status = False  #Trueならば「新しいToDoが作成されました」の表示
+
     for t in taskdata:
         if 'status_' + str(t.id) in request.POST:
             if t.completed:
@@ -115,6 +117,7 @@ def list(request, list_id):
                 list = listdata,
                 text = html.escape(task.text),
             )
+            status = True
             
     taskdata = Task.objects.filter(list=listdata) #タスクの追加や削除、変更の反映の為にもう一度代入
 
@@ -125,6 +128,7 @@ def list(request, list_id):
         'listdata': listdata,
         'taskdata': taskdata,
         'form': form,
+        'status': status,
     }
     return render(request, 'todo/list.html', params)
 
