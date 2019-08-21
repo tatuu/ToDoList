@@ -83,24 +83,28 @@
             {% for i in taskdata %}
             <div class="card mb-2">
                 <h5 class="card-header">{{i.title}}</h5>
+                {% if i.text %}
                 <div class="card-body">
+                    <h5 class="card-title">メモ</h5>
+                    {{i.text}}
+                </div>
+                {% endif %}
                 <table class="table">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>期限</th>
                             <th>作成日</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <th></th>
                             <td>{{i.deadline_date}}</td>
                             <td>{{i.create_date}}</td>
                         </tr>
                     <tbody>
                 </table>
-                <p class="card-text">{{i.text}}</p>
-            
-                </div>
 
                 <div class="card-footer">
                     <div class="container">
