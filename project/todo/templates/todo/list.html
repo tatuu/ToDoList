@@ -37,6 +37,46 @@
             </div>
         </form>
 
+        <form method = "post">
+        {% csrf_token %}
+            <div class="card mb-4">
+                <h5 class="card-header">ソート</h5>
+                <div class="card-body">
+                        <div class = "form-group">
+                            <div class="container">
+                                <div class="row">
+                                <div class="col-4">
+                                        <select name="sort1" class="form-control">
+                                            {% if sort_target == "create_date" %}
+                                                <option selected>作成日</option>
+                                                <option>期限</option>
+                                            {% elif sort_target == "deadline_date" %}
+                                                <option>作成日</option>
+                                                <option selected>期限</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                    <div class="col-4">
+                                        <select name="sort2" class="form-control">
+                                            {% if sort == "ascending" %}
+                                                <option selected>昇順</option>
+                                                <option>降順</option>
+                                            {% elif sort == "descending" %}
+                                                <option>昇順</option>
+                                                <option selected>降順</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="sort_task">
+                                        ソート
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </form>
+
         {% if not taskdata %}
             <div class="alert alert-danger" role="alert">登録されたToDoはございません</div>
         {% else %}

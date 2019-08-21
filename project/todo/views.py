@@ -120,9 +120,28 @@ def list(request, list_id):
             )
             status = True
             form = TaskForm() #ページ遷移後のformの入力値(value)をクリア
-            
-    taskdata = Task.objects.filter(list=listdata) #タスクの追加や削除、変更の反映の為にもう一度代入
 
+    
+    sort_target = 'deadline_date'
+    order_sort_target = 'deadline_date'
+    sort = 'ascending'
+    if 'sort_task' in request.POST:
+        sort1 = request.POST.get('sort1')
+        sort2 = request.POST.get('sort2')
+        
+        if sort1 == '作成日':
+            sort_target = 'create_date'
+        elif sort1 == '期限':
+            sort_target = 'deadline_date'
+
+        if sort2 == '降順':
+            order_sort_target = '-' + sort_target
+            sort = 'descending'
+        elif sort2 == '昇順':
+            order_sort_target = sort_target
+            sort = 'ascending'
+
+    taskdata = Task.objects.filter(list=listdata).order_by(order_sort_target)#タスクの追加や削除、変更の反映の為にもう一度代入
             
 
     params = {
@@ -131,6 +150,8 @@ def list(request, list_id):
         'taskdata': taskdata,
         'form': form,
         'status': status,
+        'sort_target': sort_target,
+        'sort': sort,
     }
     return render(request, 'todo/list.html', params)
 
