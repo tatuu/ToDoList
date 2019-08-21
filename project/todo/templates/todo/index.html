@@ -45,7 +45,7 @@
                             {% if dict_num|dictid:id == dict_checked_num|dictid:id %}
                             <li class="list-group-item">ToDoはすべて完了しています</li>
                             {% else %}
-                            <li class="list-group-item">ToDoの中で最も期限の近いは<b>{{ dict_deadline|dictid:id }}</b>です</li>
+                            <li class="list-group-item">ToDoの中で最も近い期限は<b>{{ dict_deadline|dictid:id }}</b>です</li>
                             {% endif %}
                         {% endifequal %}
                     {% endwith %}
