@@ -99,27 +99,28 @@ def list(request, list_id):
 
     
     if form.is_valid():
-        task = Task()
-        task.title = form.cleaned_data['title']
-        task.deadline_date = form.cleaned_data['deadline_date']
-        task.text = form.cleaned_data['text']
-
-        if len(task.title) >= 30:
+        if len(form.cleaned_data['title']) >= 30:
             form.add_error(None, 'ToDo名が31文字以上入力されています')
             create_task = False
 
+        escape_title = html.escape(form.cleaned_data['title'])
         for t in taskdata:
-            if t.title == task.title:
+            if t.title == escape_title:
                 form.add_error(None, '同じToDo名のタスクが既に存在します')
                 create_task = False
                 break
+        
+        task = Task()
+        task.title = escape_title
+        task.deadline_date = form.cleaned_data['deadline_date']
+        task.text = html.escape(form.cleaned_data['text'])
 
         if create_task:
             Task.objects.create(
-                title = html.escape(task.title),
+                title = task.title,
                 deadline_date = task.deadline_date,
                 list = listdata,
-                text = html.escape(task.text),
+                text = task.text,
             )
             status = True
             form = TaskForm() #ページ遷移後のformの入力値(value)をクリア
@@ -168,8 +169,11 @@ def task(request, task_id):
             return False
 
         td = Task.objects.filter(list=taskdata.list)
+        escape_title = html.escape(title)
         for t in td:
-            if t.title == title:
+            if t.id == task_id:
+                continue #同じToDoの時のみ
+            if t.title == escape_title:
                 form.add_error(None, '同じToDo名のタスクが既に存在します')
                 return False
 
@@ -178,9 +182,9 @@ def task(request, task_id):
     if form.is_valid():
         check_title = form.cleaned_data['title']
         if check_task(check_title):
-            taskdata.title = check_title
+            taskdata.title = html.escape(check_title)
             taskdata.deadline_date = form.cleaned_data['deadline_date']
-            taskdata.text = form.cleaned_data['text']
+            taskdata.text = html.escape(form.cleaned_data['text'])
             taskdata.save()
             messages.success(request, '編集内容を保存しました')
     else:
