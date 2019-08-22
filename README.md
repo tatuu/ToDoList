@@ -32,3 +32,13 @@
 | 削除 | ToDoとToDoリストを削除できる（リストを削除した際は関連ToDoも削除される）|
 | ソート | ToDoの期限、作成日で昇順と降順でソートができる |
 | 編集 | ToDoの編集ができる(ToDoリストのページにてToDoのタイトルをクリックすることで編集ページに遷移) |
+
+## 動作例
+トップページ
+![トップページ](https://i.imgur.com/nxe5xU2.png)
+検索画面
+![検索画面](https://i.imgur.com/uI48kjY.png)
+ToDo編集
+![ToDo編集](https://i.imgur.com/UR8BLDc.png)
+ToDoリスト
+![ToDoリスト](https://i.imgur.com/ALGvxnU.png)
