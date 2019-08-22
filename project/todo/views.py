@@ -98,7 +98,7 @@ def list(request, list_id):
             break
 
     
-    if form.is_valid() and create_task:
+    if form.is_valid():
         task = Task()
         task.title = form.cleaned_data['title']
         task.deadline_date = form.cleaned_data['deadline_date']
@@ -157,6 +157,45 @@ def list(request, list_id):
         'sort': sort,
     }
     return render(request, 'todo/list.html', params)
+
+def task(request, task_id):
+    taskdata = Task.objects.get(id=task_id)
+    form = TaskForm(request.POST or None)
+
+    def check_task(title):
+        if len(title) >= 30:
+            form.add_error(None, 'ToDo名が31文字以上入力されています')
+            return False
+
+        td = Task.objects.filter(list=taskdata.list)
+        for t in td:
+            if t.title == title:
+                form.add_error(None, '同じToDo名のタスクが既に存在します')
+                return False
+
+        return True
+
+    if form.is_valid():
+        check_title = form.cleaned_data['title']
+        if check_task(check_title):
+            taskdata.title = check_title
+            taskdata.deadline_date = form.cleaned_data['deadline_date']
+            taskdata.text = form.cleaned_data['text']
+            taskdata.save()
+            messages.success(request, '編集内容を保存しました')
+    else:
+        form = TaskForm(initial = {
+            'title': taskdata.title,
+            'deadline_date': taskdata.deadline_date,
+            'text': taskdata.text,
+        })
+
+    params = {
+        'form' : form,
+        'taskdata' : taskdata,
+    }
+
+    return render(request, 'todo/task.html', params)
 
 def search(request):
     return render(request, 'todo/search.html')

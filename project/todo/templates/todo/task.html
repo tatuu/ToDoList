@@ -1,0 +1,47 @@
+
+{% extends "todo/base.html" %}
+
+{% block title %}ToDo編集{% endblock title %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <div class="container">
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">{{ message }}</div>
+        {% endfor %}
+
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endfor %}
+
+        <p class="display-4">ToDoを編集する</p>
+
+        <form method = "post">
+        {% csrf_token %}
+            <div class="card mb-4">
+                <h5 class="card-header">ToDo「{{taskdata.title}}」の編集</h5>
+                <div class="card-body">
+                        <div class = "form-group">
+                            <div class = "mb-3">
+                                {{form.title}}
+                            </div>
+                            <div class = "mb-3">
+                                {{form.deadline_date}}
+                            </div>
+                            <div class = "mb-3">
+                                {{form.text}}
+                            </div>
+                            <button class="btn btn-outline-dark my-2 my-sm-0" type="button" onclick="location.href='{% url 'todo:list' taskdata.list.id %}'" name="back">戻る</button>
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="submit">編集を保存する</button>
+                        </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
+</div>
+
+{% endblock %}
