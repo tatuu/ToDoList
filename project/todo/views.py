@@ -80,6 +80,10 @@ def list(request, list_id):
 
     status = False  #Trueならば「新しいToDoが作成されました」の表示
 
+    create_task = True
+    form = TaskForm(request.POST or None)
+
+
     for t in taskdata:
         if 'status_' + str(t.id) in request.POST:
             if t.completed:
@@ -93,9 +97,8 @@ def list(request, list_id):
             taskdata = Task.objects.filter(list=listdata)
             break
 
-    form = TaskForm(request.POST or None)
-    if form.is_valid():
-        create_task = True
+    
+    if form.is_valid() and create_task:
         task = Task()
         task.title = form.cleaned_data['title']
         task.deadline_date = form.cleaned_data['deadline_date']
